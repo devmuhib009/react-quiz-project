@@ -60,7 +60,7 @@ function App() {
     async function fetchData(){
 
       try{
-        const res = await fetch(`http://localhost:8000/questions`);
+        const res = await fetch(`https://raw.githubusercontent.com/devmuhib009/react-quiz-project/main/data/questions.json`);
         
         if(!res.ok){
           throw new Error(`HTTP error ${res.status}`)
