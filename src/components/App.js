@@ -56,34 +56,35 @@ function App() {
   // Check if questions is an array before applying reduce
   const maxPossiblePoints = Array.isArray(questions) ? questions.reduce((prev, cur) => prev + cur.points, 0) : 0;
 
-  useEffect(function () {
-    async function fetchData() {
-      try {
-        const res = await fetch(`https://raw.githubusercontent.com/devmuhib009/react-quiz-project/main/data/questions.json`);
+  useEffect(function(){
+  async function fetchData(){
 
-        if (!res.ok) {
-          throw new Error(`HTTP error ${res.status}`);
-        }
+    try{
+      const res = await fetch(`https://raw.githubusercontent.com/devmuhib009/react-quiz-project/main/data/questions.json`);
+      
+      if(!res.ok){
+        throw new Error(`HTTP error ${res.status}`);
+      }
 
-        const data = await res.json();
-        console.log('Fetched data:', data); // Log fetched data to check format
+      const data = await res.json();
 
-        // Ensure that the fetched data is an array
-        if (Array.isArray(data)) {
-          dispatch({ type: "dataReceived", payload: data });
-        } else {
-          console.error("Fetched data is not an array:", data);
-          dispatch({ type: "dataFailed" });
-        }
-
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
+      // Check if data.questions exists and is an array
+      if (Array.isArray(data.questions)) {
+        dispatch({type: "dataReceived", payload: data.questions});
+      } else {
+        console.error("Fetched data is not an array:", data);
         dispatch({ type: "dataFailed" });
       }
-    }
 
-    fetchData();
-  }, []);
+    }catch(error){
+      console.error("Failed to fetch data:", error);
+      dispatch({ type: "dataFailed" });
+    }
+  }
+
+  fetchData();
+}, []);
+
 
   return (
     <div className="app">
